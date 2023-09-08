@@ -29,7 +29,7 @@ class ReplayMemory:
         self.actions = np.zeros(self.size, dtype = np.uint8)
         self.rewards = np.zeros(self.size, dtype = np.float16)
         self.states = np.zeros([self.size, self.num_words, self.state_dim], dtype=np.float16)
-        self.terminals = np.zeros(self.size, dtype = np.bool)
+        self.terminals = np.zeros(self.size, dtype = bool)
         self.priority = args.priority
         self.positive_rate = args.positive_rate
         self.batch_size = args.batch_size

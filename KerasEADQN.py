@@ -10,13 +10,14 @@
 import ipdb
 import keras
 import numpy as np
-import tensorflow as tf
+import tensorflow.compat.v1 as tf
 import keras.layers as kl
 from keras.backend.tensorflow_backend import set_session
 from keras.layers import *
 from keras.models import Model
 from keras.layers.normalization import BatchNormalization
 
+tf.disable_v2_behavior()
 
 class DeepQLearner:
     """

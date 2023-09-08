@@ -10,10 +10,13 @@
 import os
 import ipdb
 import numpy as np
-import tensorflow as tf
+import tensorflow.compat.v1 as tf
 from functools import reduce
 from utils import save_pkl, load_pkl
-from tensorflow.contrib.layers.python.layers import initializers
+#from tensorflow.contrib.layers.python.layers import initializers
+from tensorflow.keras import initializers
+
+tf.disable_v2_behavior()
 
 class DeepQLearner:
     """
@@ -92,7 +95,10 @@ class DeepQLearner:
         self.init_tag_emb = np.zeros([self.num_actions + 1, self.tag_dim], dtype=np.float32)
         for i in range(self.num_actions + 1):
             self.init_tag_emb[i] = i
-        conv_init = tf.contrib.layers.xavier_initializer_conv2d()
+        conv_init_bi = tf.keras.initializers.glorot_normal()
+        conv_init_tri = tf.keras.initializers.glorot_normal()
+        conv_init_four = tf.keras.initializers.glorot_normal()
+        conv_init_five = tf.keras.initializers.glorot_normal()
         activation_fn = tf.nn.relu
 
         # training network
@@ -104,10 +110,10 @@ class DeepQLearner:
             fw = s_t.shape[2]      # width of kernels
             with tf.variable_scope(name):
                 print('Initializing %s network ...' % name)
-                bi_gram,   w['bi_gram_w'],   w['bi_gram_b']   = self.conv2d(s_t, fn, [2, fw], [1, 1], conv_init, name='bi_gram')
-                tri_gram,  w['tri_gram_w'],  w['tri_gram_b']  = self.conv2d(s_t, fn, [3, fw], [1, 1], conv_init, name='tri_gram')
-                four_gram, w['four_gram_w'], w['four_gram_b'] = self.conv2d(s_t, fn, [4, fw], [1, 1], conv_init, name='four_gram')
-                five_gram, w['five_gram_w'], w['five_gram_b'] = self.conv2d(s_t, fn, [5, fw], [1, 1], conv_init, name='five_gram')
+                bi_gram,   w['bi_gram_w'],   w['bi_gram_b']   = self.conv2d(s_t, fn, [2, fw], [1, 1], conv_init_bi, name='bi_gram')
+                tri_gram,  w['tri_gram_w'],  w['tri_gram_b']  = self.conv2d(s_t, fn, [3, fw], [1, 1], conv_init_tri, name='tri_gram')
+                four_gram, w['four_gram_w'], w['four_gram_b'] = self.conv2d(s_t, fn, [4, fw], [1, 1], conv_init_four, name='four_gram')
+                five_gram, w['five_gram_w'], w['five_gram_b'] = self.conv2d(s_t, fn, [5, fw], [1, 1], conv_init_five, name='five_gram')
                 bi_gram_pooled   = self.max_pooling(bi_gram,   kernel_size = [self.num_words - 1, 1], stride = [1, 1], name='bi_gram_pooled')
                 tri_gram_pooled  = self.max_pooling(tri_gram,  kernel_size = [self.num_words - 2, 1], stride = [1, 1], name='tri_gram_pooled')
                 four_gram_pooled = self.max_pooling(four_gram, kernel_size = [self.num_words - 3, 1], stride = [1, 1], name='four_gram_pooled')

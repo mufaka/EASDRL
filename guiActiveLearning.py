@@ -29,6 +29,7 @@ from keras import backend as K
 from keras.backend.tensorflow_backend import set_session
 from Clustering import text_classification
 
+tf.disable_v2_behavior()
 
 def EASDRL_init(args, sess):
     """

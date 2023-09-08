@@ -14,7 +14,7 @@ import ipdb
 import pickle
 import argparse
 import wx.lib.buttons as buttons
-import tensorflow as tf
+import tensorflow.compat.v1 as tf
 import numpy as np
 
 from utils import get_time
@@ -27,6 +27,7 @@ from gensim.models import KeyedVectors
 from keras import backend as K
 from keras.backend.tensorflow_backend import set_session
 
+tf.disable_v2_behavior()
 
 class Agent(object):
     """

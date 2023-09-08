@@ -11,7 +11,7 @@ import time
 import ipdb
 import pickle
 import argparse
-import tensorflow as tf
+import tensorflow.compat.v1 as tf
 
 from utils import get_time, plot_results, str2bool, print_args
 from Agent import Agent
@@ -22,6 +22,7 @@ from ReplayMemory import ReplayMemory
 from gensim.models import KeyedVectors
 # from keras.backend.tensorflow_backend import set_session
 
+tf.disable_v2_behavior()
 
 def preset_args():
     """

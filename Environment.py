@@ -186,7 +186,7 @@ class Environment:
         # get word vectors from pre-trained word2vec model
         sent_vec = []
         for w in sentence['tokens']:
-            if w in self.word2vec.vocab:
+            if w in list(self.word2vec.index_to_key):
                 sent_vec.append(self.word2vec[w])
             else:
                 sent_vec.append(np.zeros(self.word_dim))
@@ -257,7 +257,7 @@ class Environment:
         for i, w in enumerate(text['tokens']):
             if i >= self.num_words:
                 break
-            if w in self.word2vec.vocab:
+            if w in list(self.word2vec.index_to_key):
                 sent_vec[i][: self.word_dim] = self.word2vec[w]
 
         self.state = sent_vec
@@ -298,7 +298,7 @@ class Environment:
         for i, w in enumerate(words):
             if i >= self.context_len:
                 break
-            if w in self.word2vec.vocab:
+            if w in list(self.word2vec.index_to_key):
                 sent_vec[i][: self.word_dim] = self.word2vec[w]
             sent_vec[i][self.word_dim: self.word_dim + self.dis_dim] = distance[i]
         self.state = sent_vec
